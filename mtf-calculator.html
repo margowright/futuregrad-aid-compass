@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTF Calculator - FutureGrad Aid Compass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #111111;
+            background: linear-gradient(135deg, #c0d8d6 0%, #7cb8b6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(245, 245, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #7cb8b6, #000000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(124, 184, 182, 0.3);
+        }
+
+        .logo-placeholder::before {
+            content: ">Ì";
+            font-size: 20px;
+        }
+
+        .header-text h1 {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-text h2 {
+            color: #111111;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Progress Indicator */
+        .progress-section {
+            background: rgba(245, 245, 245, 0.9);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(124, 184, 182, 0.3);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .step-indicator {
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .breadcrumb {
+            color: #111111;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #7cb8b6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(192, 216, 214, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, #7cb8b6, #fab131);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(124, 184, 182, 0.2);
+            color: #111111;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 6px solid #7cb8b6;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Bachelor's Warning */
+        .bachelor-warning {
+            background: linear-gradient(135deg, #fab131, #ed5a3f);
+            color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 6px solid #ed5a3f;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Form Styles */
+        .calculator-form {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            color: #111111;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(124, 184, 182, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            min-height: 44px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #7cb8b6;
+            box-shadow: 0 0 0 3px rgba(124, 184, 182, 0.2);
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #ed5a3f;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid rgba(124, 184, 182, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+        }
+
+        .radio-option:hover {
+            background: rgba(124, 184, 182, 0.1);
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            min-height: auto;
+        }
+
+        .radio-option.selected {
+            border-color: #7cb8b6;
+            background: rgba(124, 184, 182, 0.1);
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: #111111;
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .error-message {
+            color: #ed5a3f;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        /* Pell LEU Input */
+        .pell-input {
+            background: rgba(124, 184, 182, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            background: #000000;
+            color: #f5f5f5;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background: #7cb8b6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 3rem;
+        }
+
+        .results-title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-card {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card.good::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #7cb8b6;
+        }
+
+        .result-card.caution::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #fab131;
+        }
+
+        .result-card.danger::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ed5a3f;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-good {
+            background: rgba(124, 184, 182, 0.2);
+            color: #000000;
+        }
+
+        .status-caution {
+            background: rgba(250, 177, 49, 0.2);
+            color: #fab131;
+        }
+
+        .status-danger {
+            background: rgba(237, 90, 63, 0.2);
+            color: #ed5a3f;
+        }
+
+        .card-content {
+            color: #111111;
+            line-height: 1.5;
+        }
+
+        .card-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content strong {
+            color: #000000;
+        }
+
+        /* Progress Bars */
+        .mtf-progress,
+        .semester-progress,
+        .pell-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(192, 216, 214, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .mtf-fill,
+        .semester-fill,
+        .pell-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .mtf-fill {
+            background: linear-gradient(90deg, #7cb8b6, #fab131);
+        }
+
+        .semester-fill {
+            background: linear-gradient(90deg, #fab131, #ed5a3f);
+        }
+
+        .pell-fill {
+            background: linear-gradient(90deg, #7cb8b6, #000000);
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000000;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Overall Status */
+        .overall-status {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .overall-status.good {
+            border-left: 6px solid #7cb8b6;
+        }
+
+        .overall-status.caution {
+            border-left: 6px solid #fab131;
+        }
+
+        .overall-status.danger {
+            border-left: 6px solid #ed5a3f;
+        }
+
+        .overall-status h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .overall-status.good h3 {
+            color: #000000;
+        }
+
+        .overall-status.caution h3 {
+            color: #fab131;
+        }
+
+        .overall-status.danger h3 {
+            color: #ed5a3f;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #7cb8b6;
+            color: #f5f5f5;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px;
+        }
+
+        .nav-btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: #fab131;
+        }
+
+        .nav-btn.primary:hover {
+            background: #ed5a3f;
+        }
+
+        .nav-btn.secondary {
+            background: #111111;
+        }
+
+        .nav-btn.secondary:hover {
+            background: #ed5a3f;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .results-title {
+                font-size: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .progress-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .radio-group {
+                gap: 0.5rem;
+            }
+
+            .radio-option {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem 0;
+            }
+
+            .calculator-form {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+
+            .disclaimer,
+            .bachelor-warning {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .result-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-placeholder"></div>
+                    <div class="header-text">
+                        <h1>FutureGrad Aid Compass</h1>
+                        <h2>CUNY Financial Aid Navigator</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="progress-section">
+        <div class="container">
+            <div class="progress-info">
+                <div class="step-indicator">Step 3 of 3</div>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a> > <a href="federal-calculator.html">Federal Calculator</a> > <a href="tap-calculator.html">TAP Calculator</a> > MTF Calculator
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="disclaimer">
+                <div class="disclaimer-icon">9</div>
+                <div>
+                    <p>You are entering self-reported data. Results are for your general guidance and may not reflect your official financial aid status. Always verify with your financial aid advisor.</p>
+                </div>
+            </div>
+
+            <div class="bachelor-warning">
+                <div class="warning-icon">†</div>
+                <div>
+                    <p><strong>This calculator is for BACHELOR'S DEGREE programs only.</strong> Associate degree students should contact their financial aid office directly for MTF guidance.</p>
+                </div>
+            </div>
+
+            <div class="calculator-form">
+                <h2 class="form-title">Maximum Time Frame (MTF) Calculator</h2>
+                <p class="form-subtitle">Check your progress toward degree completion limits</p>
+
+                <form id="mtfForm">
+                    <div class="form-group">
+                        <label for="programCredits">Bachelor's Degree Program Credits Required</label>
+                        <input type="number" id="programCredits" name="programCredits" 
+                               min="120" max="180" step="1" value="120" required>
+                        <div class="helper-text">Most bachelor programs require 120 credits. Check your specific degree requirements.</div>
+                        <div class="error-message" id="programCreditsError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creditsAttempted">Total Credits Attempted</label>
+                        <input type="number" id="creditsAttempted" name="creditsAttempted" 
+                               min="0" max="300" step="0.001" required>
+                        <div class="helper-text">Include ALL credits attempted at CUNY, including withdrawals, failures, and transfer credits accepted</div>
+                        <div class="error-message" id="creditsAttemptedError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Are you enrolled in SEEK or College Discovery?</label>
+                        <div class="radio-group">
+                            <div class="radio-option" onclick="selectRadio('seekStatus', 'yes')">
+                                <input type="radio" name="seekStatus" value="yes" id="seekYes">
+                                <label for="seekYes">Yes (SEEK or College Discovery program)</label>
+                            </div>
+                            <div class="radio-option" onclick="selectRadio('seekStatus', 'no')">
+                                <input type="radio" name="seekStatus" value="no" id="seekNo">
+                                <label for="seekNo">No (Regular bachelor's program)</label>
+                            </div>
+                        </div>
+                        <div class="helper-text">SEEK/College Discovery students may have extended time limits</div>
+                        <div class="error-message" id="seekStatusError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="graduationTimeline">Expected Graduation Timeline</label>
+                        <select id="graduationTimeline" name="graduationTimeline" required>
+                            <option value="">Select timeline</option>
+                            <option value="4">4 years (normal pace)</option>
+                            <option value="5">5 years (extended pace)</option>
+                            <option value="6">6 years (maximum pace)</option>
+                        </select>
+                        <div class="helper-text">How long do you plan to take to complete your degree?</div>
+                        <div class="error-message" id="graduationTimelineError"></div>
+                    </div>
+
+                    <div class="pell-input">
+                        <div class="form-group">
+                            <label for="pellLEU">Pell Lifetime Eligibility Used (LEU) %</label>
+                            <input type="number" id="pellLEU" name="pellLEU" 
+                                   min="0" max="600" step="1" value="0">
+                            <div class="helper-text">Enter your current Pell Grant LEU percentage (0-600%). Check your NSLDS account or contact financial aid if unsure.</div>
+                            <div class="error-message" id="pellLEUError"></div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">Calculate MTF Status</button>
+                </form>
+            </div>
+
+            <div class="results-section" id="resultsSection">
+                <h2 class="results-title">Your Maximum Time Frame Status</h2>
+
+                <div class="results-grid">
+                    <div class="result-card" id="mtfLimitsCard">
+                        <div class="card-header">
+                            <h3 class="card-title">MTF Limits</h3>
+                            <div class="status-indicator" id="mtfLimitsStatus"></div>
+                        </div>
+                        <div class="card-content" id="mtfLimitsContent"></div>
+                    </div>
+
+                    <div class="result-card" id="semesterCard">
+                        <div class="card-header">
+                            <h3 class="card-title">Semester Calculation</h3>
+                            <div class="status-indicator" id="semesterStatus"></div>
+                        </div>
+                        <div class="card-content" id="semesterContent"></div>
+                    </div>
+
+                    <div class="result-card" id="remainingTimeCard">
+                        <div class="card-header">
+                            <h3 class="card-title">Remaining Time</h3>
+                            <div class="status-indicator" id="remainingTimeStatus"></div>
+                        </div>
+                        <div class="card-content" id="remainingTimeContent"></div>
+                    </div>
+
+                    <div class="result-card" id="pellCard">
+                        <div class="card-header">
+                            <h3 class="card-title">Pell Grant Lifetime Eligibility</h3>
+                            <div class="status-indicator" id="pellStatus"></div>
+                        </div>
+                        <div class="card-content" id="pellContent"></div>
+                    </div>
+
+                    <div class="result-card" id="graduationCard">
+                        <div class="card-header">
+                            <h3 class="card-title">Graduation Timeline</h3>
+                            <div class="status-indicator" id="graduationStatus"></div>
+                        </div>
+                        <div class="card-content" id="graduationContent"></div>
+                    </div>
+                </div>
+
+                <div class="overall-status" id="overallStatus">
+                    <h3 id="overallStatusTitle"></h3>
+                    <div id="overallStatusContent"></div>
+                </div>
+
+                <div class="navigation">
+                    <a href="tap-calculator.html" class="nav-btn">ê Back to TAP</a>
+                    <a href="dashboard.html" class="nav-btn primary">Complete & View Dashboard í</a>
+                    <a href="index.html" class="nav-btn secondary">Start Over</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('mtfForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateForm()) {
+                    calculateMTF();
+                }
+            });
+
+            // Real-time validation
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', validateInput);
+                input.addEventListener('input', clearErrors);
+            });
+        });
+
+        function selectRadio(name, value) {
+            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            const options = document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                r.closest('.radio-option').classList.remove('selected');
+            });
+            radio.checked = true;
+            radio.closest('.radio-option').classList.add('selected');
+            clearErrors({ target: radio });
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const inputs = document.querySelectorAll('#mtfForm input, #mtfForm select');
+            
+            inputs.forEach(input => {
+                if (input.name !== 'pellLEU' && !validateInput({ target: input })) {
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        function validateInput(e) {
+            const input = e.target;
+            const value = input.type === 'radio' ? input.checked : parseFloat(input.value);
+            const errorElement = document.getElementById(input.name + 'Error');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Clear previous errors
+            input.classList.remove('error');
+            if (errorElement) errorElement.style.display = 'none';
+
+            if (input.type === 'radio') {
+                const checked = document.querySelector(`input[name="${input.name}"]:checked`);
+                if (!checked) {
+                    errorMessage = 'Please select an option.';
+                    isValid = false;
+                }
+            } else if (input.name === 'pellLEU') {
+                // Pell LEU is optional, just validate range if provided
+                if (input.value !== '' && (isNaN(value) || value < 0 || value > 600)) {
+                    errorMessage = 'Pell LEU must be between 0 and 600.';
+                    isValid = false;
+                }
+            } else if (input.value === '' || (input.type === 'number' && isNaN(value))) {
+                errorMessage = 'This field is required.';
+                isValid = false;
+            } else if (input.type === 'number') {
+                if (value < parseFloat(input.min)) {
+                    errorMessage = `Value must be at least ${input.min}.`;
+                    isValid = false;
+                } else if (value > parseFloat(input.max)) {
+                    errorMessage = `Value must be no more than ${input.max}.`;
+                    isValid = false;
+                }
+            }
+
+            if (!isValid && errorElement) {
+                input.classList.add('error');
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+            }
+
+            return isValid;
+        }
+
+        function clearErrors(e) {
+            const input = e.target;
+            const errorElement = document.getElementById(input.name + 'Error');
+            input.classList.remove('error');
+            if (errorElement) errorElement.style.display = 'none';
+        }
+
+        function calculateMTF() {
+            const programCredits = parseInt(document.getElementById('programCredits').value);
+            const creditsAttempted = parseFloat(document.getElementById('creditsAttempted').value);
+            const seekStatus = document.querySelector('input[name="seekStatus"]:checked').value;
+            const graduationTimeline = parseInt(document.getElementById('graduationTimeline').value);
+            const pellLEU = parseFloat(document.getElementById('pellLEU').value) || 0;
+
+            // Calculate MTF limits (150% of program requirements)
+            const maxCreditsAllowed = programCredits * 1.5;
+            const creditsUsedPercentage = (creditsAttempted / maxCreditsAllowed) * 100;
+            const creditsRemaining = Math.max(0, maxCreditsAllowed - creditsAttempted);
+
+            // Calculate semester limits (4 years ◊ 2 semesters ◊ 1.5 = 12 semesters max)
+            const maxSemestersAllowed = 12;
+            const estimatedSemestersCompleted = creditsAttempted / 15; // Assuming 15 credits per semester
+            const semestersRemaining = Math.max(0, maxSemestersAllowed - estimatedSemestersCompleted);
+
+            // Calculate Pell Grant limits
+            const pellRemaining = Math.max(0, 600 - pellLEU);
+            const pellPaymentsRemaining = Math.floor(pellRemaining / 50);
+
+            // Determine status levels
+            const mtfStatus = creditsUsedPercentage >= 100 ? 'danger' : creditsUsedPercentage >= 80 ? 'caution' : 'good';
+            const semesterStatus = estimatedSemestersCompleted >= 12 ? 'danger' : estimatedSemestersCompleted >= 10 ? 'caution' : 'good';
+            const pellStatus = pellLEU >= 600 ? 'danger' : pellLEU >= 500 ? 'caution' : 'good';
+            const timeStatus = creditsRemaining <= 10 ? 'danger' : creditsRemaining <= 30 ? 'caution' : 'good';
+
+            // Calculate graduation timeline analysis
+            const creditsNeeded = Math.max(0, programCredits - (creditsAttempted * 0.8)); // Assuming 80% of attempted are earned
+            const semestersNeeded = Math.ceil(creditsNeeded / 15);
+            const yearsNeeded = Math.ceil(semestersNeeded / 2);
+            const onTrack = yearsNeeded <= graduationTimeline;
+
+            // Determine overall status
+            const statuses = [mtfStatus, semesterStatus, timeStatus];
+            let overallStatus = 'good';
+            if (statuses.includes('danger')) overallStatus = 'danger';
+            else if (statuses.includes('caution')) overallStatus = 'caution';
+
+            // Display results
+            displayMTFLimits(programCredits, maxCreditsAllowed, creditsAttempted, creditsUsedPercentage, mtfStatus);
+            displaySemesterCalculation(maxSemestersAllowed, estimatedSemestersCompleted, semesterStatus);
+            displayRemainingTime(creditsRemaining, semestersRemaining, timeStatus);
+            displayPellEligibility(pellLEU, pellRemaining, pellPaymentsRemaining, pellStatus);
+            displayGraduationTimeline(graduationTimeline, creditsNeeded, semestersNeeded, onTrack);
+            displayOverallStatus(overallStatus, mtfStatus, semesterStatus, timeStatus, pellStatus);
+
+            // Save results to localStorage
+            const results = {
+                programCredits: programCredits,
+                creditsAttempted: creditsAttempted.toFixed(3),
+                seekStatus: seekStatus,
+                graduationTimeline: graduationTimeline,
+                pellLEU: pellLEU,
+                maxCreditsAllowed: maxCreditsAllowed,
+                creditsUsedPercentage: creditsUsedPercentage.toFixed(1),
+                creditsRemaining: creditsRemaining.toFixed(1),
+                maxSemestersAllowed: maxSemestersAllowed,
+                estimatedSemestersCompleted: estimatedSemestersCompleted.toFixed(1),
+                semestersRemaining: semestersRemaining.toFixed(1),
+                pellRemaining: pellRemaining,
+                pellPaymentsRemaining: pellPaymentsRemaining,
+                mtfStatus: mtfStatus,
+                semesterStatus: semesterStatus,
+                pellStatus: pellStatus,
+                timeStatus: timeStatus,
+                overallStatus: overallStatus,
+                onTrack: onTrack,
+                programType: "Bachelor's Programs",
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('mtfResults', JSON.stringify(results));
+
+            // Show results section with animation
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function displayMTFLimits(programCredits, maxCredits, attempted, percentage, status) {
+            const card = document.getElementById('mtfLimitsCard');
+            const statusEl = document.getElementById('mtfLimitsStatus');
+            const content = document.getElementById('mtfLimitsContent');
+
+            card.className = `result-card ${status}`;
+            statusEl.className = `status-indicator status-${status}`;
+            
+            let statusText = ' Within MTF limits';
+            if (status === 'caution') statusText = '† Approaching MTF limits';
+            if (status === 'danger') statusText = 'L Exceeds MTF limits';
+            
+            statusEl.innerHTML = statusText;
+
+            const progressWidth = Math.min(percentage, 100);
+
+            content.innerHTML = `
+                <p><strong>Maximum credits allowed:</strong> ${maxCredits} credits (150% of program requirements)</p>
+                <p><strong>Calculation:</strong> ${programCredits} program credits ◊ 150% = ${maxCredits} maximum credits</p>
+                <p><strong>Credits attempted:</strong> ${attempted.toFixed(3)} of ${maxCredits} maximum</p>
+                <div class="mtf-progress">
+                    <div class="mtf-fill" style="width: ${progressWidth}%"></div>
+                    <div class="progress-text">${percentage.toFixed(1)}% used</div>
+                </div>
+                <p><strong>MTF usage:</strong> ${percentage.toFixed(1)}% of maximum allowed</p>
+            `;
+        }
+
+        function displaySemesterCalculation(maxSemesters, completed, status) {
+            const card = document.getElementById('semesterCard');
+            const statusEl = document.getElementById('semesterStatus');
+            const content = document.getElementById('semesterContent');
+
+            card.className = `result-card ${status}`;
+            statusEl.className = `status-indicator status-${status}`;
+            
+            let statusText = ' Within semester limits';
+            if (status === 'caution') statusText = '† Approaching limits';
+            if (status === 'danger') statusText = 'L Exceeds semester limits';
+            
+            statusEl.innerHTML = statusText;
+
+            const progressWidth = Math.min((completed / maxSemesters) * 100, 100);
+
+            content.innerHTML = `
+                <p><strong>Maximum semesters allowed:</strong> ${maxSemesters} semesters</p>
+                <p><strong>Calculation:</strong> 4 years ◊ 2 semesters ◊ 150% = ${maxSemesters} semesters</p>
+                <p><strong>Estimated semesters completed:</strong> ${completed.toFixed(1)} (assuming 15 credits/semester)</p>
+                <div class="semester-progress">
+                    <div class="semester-fill" style="width: ${progressWidth}%"></div>
+                    <div class="progress-text">${completed.toFixed(1)} of ${maxSemesters}</div>
+                </div>
+                <p><strong>Semesters remaining:</strong> ${Math.max(0, maxSemesters - completed).toFixed(1)} semesters</p>
+            `;
+        }
+
+        function displayRemainingTime(creditsRemaining, semestersRemaining, status) {
+            const card = document.getElementById('remainingTimeCard');
+            const statusEl = document.getElementById('remainingTimeStatus');
+            const content = document.getElementById('remainingTimeContent');
+
+            card.className = `result-card ${status}`;
+            statusEl.className = `status-indicator status-${status}`;
+            
+            let statusText = ' Plenty of time';
+            if (status === 'caution') statusText = '† Getting close';
+            if (status === 'danger') statusText = 'L Very limited time';
+            
+            statusEl.innerHTML = statusText;
+
+            let timelineText = 'You have plenty of time to complete your degree';
+            if (status === 'caution') timelineText = 'You should plan carefully to complete on time';
+            if (status === 'danger') timelineText = 'You have very limited time remaining';
+
+            content.innerHTML = `
+                <p><strong>Credits remaining before MTF cap:</strong> ${creditsRemaining.toFixed(1)} credits</p>
+                <p><strong>Estimated semesters remaining:</strong> ${semestersRemaining.toFixed(1)} semesters</p>
+                <p><strong>Timeline assessment:</strong> ${timelineText}</p>
+                <p><em>Recommendation: Take 15+ credits per semester and minimize withdrawals</em></p>
+            `;
+        }
+
+        function displayPellEligibility(pellLEU, pellRemaining, paymentsRemaining, status) {
+            const card = document.getElementById('pellCard');
+            const statusEl = document.getElementById('pellStatus');
+            const content = document.getElementById('pellContent');
+
+            card.className = `result-card ${status}`;
+            statusEl.className = `status-indicator status-${status}`;
+            
+            let statusText = ' Pell eligibility available';
+            if (status === 'caution') statusText = '† Pell eligibility limited';
+            if (status === 'danger') statusText = 'L Pell eligibility exhausted';
+            
+            statusEl.innerHTML = statusText;
+
+            const progressWidth = Math.min((pellLEU / 600) * 100, 100);
+
+            content.innerHTML = `
+                <p><strong>Pell Grant lifetime limit:</strong> 600% (12 full-time semesters)</p>
+                <p><strong>Current LEU:</strong> ${pellLEU}% used</p>
+                <p><strong>Remaining eligibility:</strong> ${pellRemaining}%</p>
+                <div class="pell-progress">
+                    <div class="pell-fill" style="width: ${progressWidth}%"></div>
+                    <div class="progress-text">${pellLEU}% used</div>
+                </div>
+                <p><strong>Estimated payments remaining:</strong> ${paymentsRemaining} full-time semesters</p>
+                <p><small>Note: Each full-time semester uses 50% of Pell eligibility</small></p>
+            `;
+        }
+
+        function displayGraduationTimeline(timeline, creditsNeeded, semestersNeeded, onTrack) {
+            const card = document.getElementById('graduationCard');
+            const statusEl = document.getElementById('graduationStatus');
+            const content = document.getElementById('graduationContent');
+
+            const status = onTrack ? 'good' : 'caution';
+            card.className = `result-card ${status}`;
+            statusEl.className = `status-indicator status-${status}`;
+            statusEl.innerHTML = onTrack ? ' On track' : '† Behind schedule';
+
+            const requiredPace = Math.ceil(creditsNeeded / (timeline * 2));
+
+            content.innerHTML = `
+                <p><strong>Expected graduation timeline:</strong> ${timeline} years</p>
+                <p><strong>Estimated credits needed:</strong> ${creditsNeeded.toFixed(0)} credits</p>
+                <p><strong>Semesters needed:</strong> ${semestersNeeded} semesters</p>
+                <p><strong>Required pace:</strong> ${requiredPace} credits per semester</p>
+                <p><strong>Status:</strong> ${onTrack ? 'You are on track for your planned timeline' : 'You may need to accelerate your pace or extend your timeline'}</p>
+            `;
+        }
+
+        function displayOverallStatus(overallStatus, mtfStatus, semesterStatus, timeStatus, pellStatus) {
+            const overallEl = document.getElementById('overallStatus');
+            const title = document.getElementById('overallStatusTitle');
+            const content = document.getElementById('overallStatusContent');
+
+            overallEl.className = `overall-status ${overallStatus}`;
+
+            let titleText = ' You are within all Maximum Time Frame limits';
+            let contentText = 'Stay on track by taking 15+ credits per semester and minimizing withdrawals.';
+
+            if (overallStatus === 'caution') {
+                titleText = '† You are approaching Maximum Time Frame limits';
+                contentText = 'Consider increasing your course load and avoiding withdrawals to stay on track.';
+            } else if (overallStatus === 'danger') {
+                titleText = 'L You have exceeded Maximum Time Frame limits';
+                contentText = 'Contact your financial aid advisor immediately to discuss your options.';
+            }
+
+            title.innerHTML = titleText;
+
+            const concerns = [];
+            if (mtfStatus === 'danger') concerns.push('MTF credit limits exceeded');
+            else if (mtfStatus === 'caution') concerns.push('Approaching MTF credit limits');
+            
+            if (semesterStatus === 'danger') concerns.push('Semester limits exceeded');
+            else if (semesterStatus === 'caution') concerns.push('Approaching semester limits');
+            
+            if (timeStatus === 'danger') concerns.push('Very limited time remaining');
+            else if (timeStatus === 'caution') concerns.push('Limited time remaining');
+            
+            if (pellStatus === 'danger') concerns.push('Pell eligibility exhausted');
+            else if (pellStatus === 'caution') concerns.push('Limited Pell eligibility');
+
+            if (concerns.length > 0) {
+                contentText += `<br><br><strong>Areas of concern:</strong>
+                    <ul style="text-align: left; margin: 1rem 0;">
+                        ${concerns.map(concern => `<li>${concern}</li>`).join('')}
+                    </ul>`;
+            }
+
+            content.innerHTML = `<p>${contentText}</p>`;
+        }
+    </script>
+</body>
+</html>

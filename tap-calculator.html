@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TAP Calculator - FutureGrad Aid Compass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #111111;
+            background: linear-gradient(135deg, #c0d8d6 0%, #7cb8b6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(245, 245, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #7cb8b6, #000000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(124, 184, 182, 0.3);
+        }
+
+        .logo-placeholder::before {
+            content: ">Ì";
+            font-size: 20px;
+        }
+
+        .header-text h1 {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-text h2 {
+            color: #111111;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Progress Indicator */
+        .progress-section {
+            background: rgba(245, 245, 245, 0.9);
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(124, 184, 182, 0.3);
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .step-indicator {
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .breadcrumb {
+            color: #111111;
+            font-size: 0.9rem;
+        }
+
+        .breadcrumb a {
+            color: #7cb8b6;
+            text-decoration: none;
+        }
+
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(192, 216, 214, 0.5);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 66.66%;
+            height: 100%;
+            background: linear-gradient(90deg, #7cb8b6, #fab131);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(124, 184, 182, 0.2);
+            color: #111111;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 6px solid #7cb8b6;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .disclaimer-icon {
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Bachelor's Warning */
+        .bachelor-warning {
+            background: linear-gradient(135deg, #fab131, #ed5a3f);
+            color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 6px solid #ed5a3f;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .warning-icon {
+            font-size: 1.5rem;
+            margin-top: 0.2rem;
+        }
+
+        /* Form Styles */
+        .calculator-form {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            color: #111111;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(124, 184, 182, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            min-height: 44px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #7cb8b6;
+            box-shadow: 0 0 0 3px rgba(124, 184, 182, 0.2);
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: #ed5a3f;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            border: 2px solid rgba(124, 184, 182, 0.3);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 44px;
+        }
+
+        .radio-option:hover {
+            background: rgba(124, 184, 182, 0.1);
+        }
+
+        .radio-option input[type="radio"] {
+            width: auto;
+            min-height: auto;
+        }
+
+        .radio-option.selected {
+            border-color: #7cb8b6;
+            background: rgba(124, 184, 182, 0.1);
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: #111111;
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .error-message {
+            color: #ed5a3f;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .credit-warning {
+            background: rgba(237, 90, 63, 0.1);
+            color: #ed5a3f;
+            padding: 0.75rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            background: #000000;
+            color: #f5f5f5;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background: #7cb8b6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .calculate-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 3rem;
+        }
+
+        .results-title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .result-card {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card.pass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #7cb8b6;
+        }
+
+        .result-card.fail::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: #ed5a3f;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-pass {
+            background: rgba(124, 184, 182, 0.2);
+            color: #000000;
+        }
+
+        .status-fail {
+            background: rgba(237, 90, 63, 0.2);
+            color: #ed5a3f;
+        }
+
+        .card-content {
+            color: #111111;
+            line-height: 1.5;
+        }
+
+        .card-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .card-content strong {
+            color: #000000;
+        }
+
+        /* Points Progress Bar */
+        .points-progress {
+            width: 100%;
+            height: 20px;
+            background: rgba(192, 216, 214, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .points-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #7cb8b6, #fab131);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .points-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #000000;
+            text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.7);
+        }
+
+        /* Overall Status */
+        .overall-status {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .overall-status.pass {
+            border-left: 6px solid #7cb8b6;
+        }
+
+        .overall-status.fail {
+            border-left: 6px solid #ed5a3f;
+        }
+
+        .overall-status h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .overall-status.pass h3 {
+            color: #000000;
+        }
+
+        .overall-status.fail h3 {
+            color: #ed5a3f;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #7cb8b6;
+            color: #f5f5f5;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px;
+        }
+
+        .nav-btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: #fab131;
+        }
+
+        .nav-btn.primary:hover {
+            background: #ed5a3f;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .results-title {
+                font-size: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .progress-info {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .card-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .radio-group {
+                gap: 0.5rem;
+            }
+
+            .radio-option {
+                padding: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem 0;
+            }
+
+            .calculator-form {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+
+            .disclaimer,
+            .bachelor-warning {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .result-card {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-placeholder"></div>
+                    <div class="header-text">
+                        <h1>FutureGrad Aid Compass</h1>
+                        <h2>CUNY Financial Aid Navigator</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="progress-section">
+        <div class="container">
+            <div class="progress-info">
+                <div class="step-indicator">Step 2 of 3</div>
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a> > <a href="federal-calculator.html">Federal Calculator</a> > TAP Calculator
+                </div>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <div class="disclaimer">
+                <div class="disclaimer-icon">9</div>
+                <div>
+                    <p>You are entering self-reported data. Results are for your general guidance and may not reflect your official financial aid status. Always verify with your financial aid advisor.</p>
+                </div>
+            </div>
+
+            <div class="bachelor-warning">
+                <div class="warning-icon">†</div>
+                <div>
+                    <p><strong>This calculator is for BACHELOR'S DEGREE programs only.</strong> Associate degree students and community college students should contact their financial aid office directly for TAP eligibility guidance.</p>
+                </div>
+            </div>
+
+            <div class="calculator-form">
+                <h2 class="form-title">TAP Eligibility Calculator (Bachelor's Programs Only)</h2>
+                <p class="form-subtitle">Check your TAP eligibility and remaining points</p>
+
+                <form id="tapForm">
+                    <div class="form-group">
+                        <label>Are you enrolled in SEEK or College Discovery?</label>
+                        <div class="radio-group">
+                            <div class="radio-option" onclick="selectRadio('seekStatus', 'yes')">
+                                <input type="radio" name="seekStatus" value="yes" id="seekYes">
+                                <label for="seekYes">Yes (SEEK or College Discovery program)</label>
+                            </div>
+                            <div class="radio-option" onclick="selectRadio('seekStatus', 'no')">
+                                <input type="radio" name="seekStatus" value="no" id="seekNo">
+                                <label for="seekNo">No (Regular bachelor's program)</label>
+                            </div>
+                        </div>
+                        <div class="error-message" id="seekStatusError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tapPointsUsed">TAP Points Already Used</label>
+                        <input type="number" id="tapPointsUsed" name="tapPointsUsed" 
+                               min="0" max="60" step="6" value="0" required>
+                        <div class="helper-text">Each full-time semester uses 6 TAP points. Count all semesters you've received TAP.</div>
+                        <div class="error-message" id="tapPointsUsedError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paymentNumber">TAP Payment Number</label>
+                        <select id="paymentNumber" name="paymentNumber" required>
+                            <option value="">Select payment number</option>
+                            <option value="1">1st</option>
+                            <option value="2">2nd</option>
+                            <option value="3">3rd</option>
+                            <option value="4">4th</option>
+                            <option value="5">5th</option>
+                            <option value="6">6th</option>
+                            <option value="7">7th</option>
+                            <option value="8">8th</option>
+                            <option value="9">9th</option>
+                            <option value="10">10th+</option>
+                        </select>
+                        <div class="helper-text">Which TAP payment are you applying for?</div>
+                        <div class="error-message" id="paymentNumberError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creditsCompleted">Credits Completed Toward Degree</label>
+                        <input type="number" id="creditsCompleted" name="creditsCompleted" 
+                               min="0" max="300" step="1" required>
+                        <div class="helper-text">Total credits earned that count toward your bachelor's degree</div>
+                        <div class="error-message" id="creditsCompletedError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentGPA">Current Cumulative GPA</label>
+                        <input type="number" id="currentGPA" name="currentGPA" 
+                               min="0" max="4.0" step="0.01" required>
+                        <div class="helper-text">Your overall GPA</div>
+                        <div class="error-message" id="currentGPAError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creditsEnrolled">Credits Enrolled This Semester</label>
+                        <input type="number" id="creditsEnrolled" name="creditsEnrolled" 
+                               min="0" max="30" step="1" required>
+                        <div class="helper-text">Credits you're currently registered for (must be at least 12 for TAP)</div>
+                        <div class="credit-warning" id="creditWarning">
+                            † You must be enrolled in at least 12 credits to be eligible for TAP.
+                        </div>
+                        <div class="error-message" id="creditsEnrolledError"></div>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">Calculate TAP Eligibility</button>
+                </form>
+            </div>
+
+            <div class="results-section" id="resultsSection">
+                <h2 class="results-title">Your TAP Eligibility Status (Bachelor's Programs)</h2>
+
+                <div class="results-grid">
+                    <div class="result-card" id="pointsCard">
+                        <div class="card-header">
+                            <h3 class="card-title">TAP Points</h3>
+                            <div class="status-indicator" id="pointsStatus"></div>
+                        </div>
+                        <div class="card-content" id="pointsContent"></div>
+                    </div>
+
+                    <div class="result-card" id="gpaCard">
+                        <div class="card-header">
+                            <h3 class="card-title">GPA Requirement</h3>
+                            <div class="status-indicator" id="gpaStatus"></div>
+                        </div>
+                        <div class="card-content" id="gpaContent"></div>
+                    </div>
+
+                    <div class="result-card" id="creditsCard">
+                        <div class="card-header">
+                            <h3 class="card-title">Credit Requirements</h3>
+                            <div class="status-indicator" id="creditsStatus"></div>
+                        </div>
+                        <div class="card-content" id="creditsContent"></div>
+                    </div>
+                </div>
+
+                <div class="overall-status" id="overallStatus">
+                    <h3 id="overallStatusTitle"></h3>
+                    <div id="overallStatusContent"></div>
+                </div>
+
+                <div class="navigation">
+                    <a href="federal-calculator.html" class="nav-btn">ê Back to Federal</a>
+                    <a href="mtf-calculator.html" class="nav-btn primary">Save & Continue to MTF í</a>
+                    <a href="dashboard.html" class="nav-btn">Skip to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('tapForm');
+            const resultsSection = document.getElementById('resultsSection');
+            const creditsEnrolled = document.getElementById('creditsEnrolled');
+            const creditWarning = document.getElementById('creditWarning');
+
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                if (validateForm()) {
+                    calculateTAPEligibility();
+                }
+            });
+
+            // Real-time validation
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                input.addEventListener('blur', validateInput);
+                input.addEventListener('input', clearErrors);
+            });
+
+            // Show credit warning
+            creditsEnrolled.addEventListener('input', function() {
+                const credits = parseInt(this.value);
+                if (credits > 0 && credits < 12) {
+                    creditWarning.style.display = 'block';
+                } else {
+                    creditWarning.style.display = 'none';
+                }
+            });
+        });
+
+        function selectRadio(name, value) {
+            const radio = document.querySelector(`input[name="${name}"][value="${value}"]`);
+            const options = document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+                r.closest('.radio-option').classList.remove('selected');
+            });
+            radio.checked = true;
+            radio.closest('.radio-option').classList.add('selected');
+            clearErrors({ target: radio });
+        }
+
+        function validateForm() {
+            let isValid = true;
+            const inputs = document.querySelectorAll('#tapForm input, #tapForm select');
+            
+            inputs.forEach(input => {
+                if (!validateInput({ target: input })) {
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        function validateInput(e) {
+            const input = e.target;
+            const value = input.type === 'radio' ? input.checked : parseFloat(input.value);
+            const errorElement = document.getElementById(input.name + 'Error');
+            let isValid = true;
+            let errorMessage = '';
+
+            // Clear previous errors
+            input.classList.remove('error');
+            if (errorElement) errorElement.style.display = 'none';
+
+            if (input.type === 'radio') {
+                const checked = document.querySelector(`input[name="${input.name}"]:checked`);
+                if (!checked) {
+                    errorMessage = 'Please select an option.';
+                    isValid = false;
+                }
+            } else if (input.value === '' || (input.type === 'number' && isNaN(value))) {
+                errorMessage = 'This field is required.';
+                isValid = false;
+            } else if (input.type === 'number') {
+                if (value < parseFloat(input.min)) {
+                    errorMessage = `Value must be at least ${input.min}.`;
+                    isValid = false;
+                } else if (value > parseFloat(input.max)) {
+                    errorMessage = `Value must be no more than ${input.max}.`;
+                    isValid = false;
+                }
+            }
+
+            if (!isValid && errorElement) {
+                input.classList.add('error');
+                errorElement.textContent = errorMessage;
+                errorElement.style.display = 'block';
+            }
+
+            return isValid;
+        }
+
+        function clearErrors(e) {
+            const input = e.target;
+            const errorElement = document.getElementById(input.name + 'Error');
+            input.classList.remove('error');
+            if (errorElement) errorElement.style.display = 'none';
+        }
+
+        function calculateTAPEligibility() {
+            const seekStatus = document.querySelector('input[name="seekStatus"]:checked').value;
+            const tapPointsUsed = parseInt(document.getElementById('tapPointsUsed').value);
+            const paymentNumber = parseInt(document.getElementById('paymentNumber').value);
+            const creditsCompleted = parseInt(document.getElementById('creditsCompleted').value);
+            const currentGPA = parseFloat(document.getElementById('currentGPA').value);
+            const creditsEnrolled = parseInt(document.getElementById('creditsEnrolled').value);
+
+            // Calculate TAP points available
+            const totalPoints = seekStatus === 'yes' ? 60 : 48;
+            const pointsRemaining = totalPoints - tapPointsUsed;
+            const semestersRemaining = Math.floor(pointsRemaining / 6);
+
+            // Get required GPA
+            const requiredGPA = getRequiredGPA(seekStatus, paymentNumber, creditsCompleted);
+
+            // Get required credits for completion
+            const requiredCredits = getRequiredCredits(paymentNumber);
+
+            // Check all requirements
+            const pointsPass = pointsRemaining > 0;
+            const gpaPass = currentGPA >= requiredGPA;
+            const enrollmentPass = creditsEnrolled >= 12;
+            const completionPass = creditsCompleted >= requiredCredits;
+            const creditsPass = enrollmentPass && completionPass;
+            const overallPass = pointsPass && gpaPass && creditsPass;
+
+            // Display results
+            displayPointsResults(totalPoints, tapPointsUsed, pointsRemaining, semestersRemaining, pointsPass, seekStatus);
+            displayGPAResults(currentGPA, requiredGPA, paymentNumber, creditsCompleted, gpaPass, seekStatus);
+            displayCreditsResults(creditsEnrolled, creditsCompleted, requiredCredits, paymentNumber, creditsPass, enrollmentPass, completionPass);
+            displayOverallResults(overallPass, pointsPass, gpaPass, creditsPass);
+
+            // Save results to localStorage
+            const results = {
+                seekStatus: seekStatus,
+                tapPointsUsed: tapPointsUsed,
+                paymentNumber: paymentNumber,
+                creditsCompleted: creditsCompleted,
+                currentGPA: currentGPA.toFixed(2),
+                creditsEnrolled: creditsEnrolled,
+                totalPoints: totalPoints,
+                pointsRemaining: pointsRemaining,
+                semestersRemaining: semestersRemaining,
+                requiredGPA: requiredGPA.toFixed(2),
+                requiredCredits: requiredCredits,
+                pointsPass: pointsPass,
+                gpaPass: gpaPass,
+                creditsPass: creditsPass,
+                overallPass: overallPass,
+                programType: "Bachelor's Programs",
+                timestamp: new Date().toISOString()
+            };
+
+            localStorage.setItem('tapResults', JSON.stringify(results));
+
+            // Show results section with animation
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function getRequiredGPA(seekStatus, paymentNumber, creditsCompleted) {
+            // BACHELOR'S GPA REQUIREMENTS based on payment number and credits completed
+            
+            if (seekStatus === 'yes') {
+                // SEEK/College Discovery Bachelor's GPA Requirements (more lenient)
+                const seekGPAChart = {
+                    1: { 0: 0, 3: 1.1, 9: 1.2, 21: 1.3, 33: 2.0, 999: 2.0 },
+                    2: { 3: 1.1, 9: 1.2, 21: 1.3, 33: 2.0, 999: 2.0 },
+                    3: { 9: 1.2, 21: 1.3, 33: 2.0, 999: 2.0 },
+                    4: { 21: 1.3, 33: 2.0, 999: 2.0 },
+                    5: { 33: 2.0, 999: 2.0 },
+                    6: { 45: 2.0, 999: 2.0 },
+                    7: { 57: 2.0, 999: 2.0 },
+                    8: { 69: 2.0, 999: 2.0 },
+                    9: { 81: 2.0, 999: 2.0 },
+                    10: { 93: 2.0, 999: 2.0 }
+                };
+                
+                const chart = seekGPAChart[paymentNumber] || { 999: 2.0 };
+                const creditThresholds = Object.keys(chart).map(Number).sort((a, b) => a - b);
+                
+                for (let i = creditThresholds.length - 1; i >= 0; i--) {
+                    if (creditsCompleted >= creditThresholds[i]) {
+                        return chart[creditThresholds[i]];
+                    }
+                }
+                return 0;
+            } else {
+                // Regular Bachelor's GPA Requirements
+                const regularGPAChart = {
+                    1: { 0: 0, 6: 1.5, 15: 1.8, 27: 2.0, 999: 2.0 },
+                    2: { 6: 1.5, 15: 1.8, 27: 2.0, 39: 2.0, 999: 2.0 },
+                    3: { 15: 1.8, 27: 2.0, 39: 2.0, 999: 2.0 },
+                    4: { 27: 2.0, 39: 2.0, 999: 2.0 },
+                    5: { 39: 2.0, 999: 2.0 },
+                    6: { 51: 2.0, 999: 2.0 },
+                    7: { 63: 2.0, 999: 2.0 },
+                    8: { 75: 2.0, 999: 2.0 },
+                    9: { 87: 2.0, 999: 2.0 },
+                    10: { 99: 2.0, 999: 2.0 }
+                };
+                
+                const chart = regularGPAChart[paymentNumber] || { 999: 2.0 };
+                const creditThresholds = Object.keys(chart).map(Number).sort((a, b) => a - b);
+                
+                for (let i = creditThresholds.length - 1; i >= 0; i--) {
+                    if (creditsCompleted >= creditThresholds[i]) {
+                        return chart[creditThresholds[i]];
+                    }
+                }
+                return 0;
+            }
+        }
+
+        function getRequiredCredits(paymentNumber) {
+            // Bachelor's completion requirements by payment number
+            const completionChart = {
+                1: 0, 2: 6, 3: 15, 4: 27, 5: 39,
+                6: 51, 7: 63, 8: 75, 9: 87, 10: 99
+            };
+            return completionChart[paymentNumber] || 99;
+        }
+
+        function displayPointsResults(totalPoints, used, remaining, semesters, passes, seekStatus) {
+            const card = document.getElementById('pointsCard');
+            const status = document.getElementById('pointsStatus');
+            const content = document.getElementById('pointsContent');
+
+            card.className = `result-card ${passes ? 'pass' : 'fail'}`;
+            status.className = `status-indicator ${passes ? 'status-pass' : 'status-fail'}`;
+            status.innerHTML = `${passes ? '' : 'L'} ${passes ? 'Points available' : 'Points exhausted'}`;
+
+            const progressWidth = ((totalPoints - remaining) / totalPoints) * 100;
+            const programType = seekStatus === 'yes' ? 'SEEK/College Discovery' : 'Regular bachelor\'s';
+
+            content.innerHTML = `
+                <p><strong>Program Type:</strong> ${programType} program</p>
+                <p><strong>Total points available:</strong> ${totalPoints} points</p>
+                <p><strong>Points used:</strong> ${used} points</p>
+                <p><strong>Points remaining:</strong> ${remaining} points</p>
+                <div class="points-progress">
+                    <div class="points-fill" style="width: ${progressWidth}%"></div>
+                    <div class="points-text">${remaining} remaining</div>
+                </div>
+                <p><strong>Estimated semesters remaining:</strong> ${semesters} full-time semesters</p>
+            `;
+        }
+
+        function displayGPAResults(currentGPA, requiredGPA, paymentNumber, creditsCompleted, passes, seekStatus) {
+            const card = document.getElementById('gpaCard');
+            const status = document.getElementById('gpaStatus');
+            const content = document.getElementById('gpaContent');
+
+            card.className = `result-card ${passes ? 'pass' : 'fail'}`;
+            status.className = `status-indicator ${passes ? 'status-pass' : 'status-fail'}`;
+            status.innerHTML = `${passes ? '' : 'L'} ${passes ? 'Meets GPA requirement' : 'Below required GPA'}`;
+
+            const programType = seekStatus === 'yes' ? 'SEEK/College Discovery' : 'Regular bachelor\'s';
+            const chartType = seekStatus === 'yes' ? 'SEEK/College Discovery bachelor\'s chart' : 'Regular bachelor\'s chart';
+
+            content.innerHTML = `
+                <p><strong>Your GPA:</strong> ${currentGPA.toFixed(2)}</p>
+                <p><strong>Required GPA:</strong> ${requiredGPA.toFixed(2)}</p>
+                <p><strong>For payment #${paymentNumber} with ${creditsCompleted} credits completed, you need ${requiredGPA.toFixed(2)} GPA</strong></p>
+                <p><em>Using ${chartType}</em></p>
+                <p><small>GPA requirements are based on your ${programType} program status</small></p>
+            `;
+        }
+
+        function displayCreditsResults(enrolled, completed, required, paymentNumber, creditsPass, enrollmentPass, completionPass) {
+            const card = document.getElementById('creditsCard');
+            const status = document.getElementById('creditsStatus');
+            const content = document.getElementById('creditsContent');
+
+            card.className = `result-card ${creditsPass ? 'pass' : 'fail'}`;
+            status.className = `status-indicator ${creditsPass ? 'status-pass' : 'status-fail'}`;
+            status.innerHTML = `${creditsPass ? '' : 'L'} ${creditsPass ? 'Meets credit requirements' : 'Below required credits'}`;
+
+            let enrollmentStatus = enrollmentPass ? ' Meets enrollment requirement' : 'L Below enrollment requirement';
+            let completionStatus = completionPass ? ' Meets completion requirement' : 'L Below completion requirement';
+
+            content.innerHTML = `
+                <p><strong>Enrollment Requirement:</strong></p>
+                <p style="margin-left: 1rem;">${enrollmentStatus}</p>
+                <p style="margin-left: 1rem;">Currently enrolled: ${enrolled} credits (need e12)</p>
+                <br>
+                <p><strong>Completion Requirement (Bachelor's Chart):</strong></p>
+                <p style="margin-left: 1rem;">${completionStatus}</p>
+                <p style="margin-left: 1rem;">Credits completed: ${completed} (need e${required} for payment #${paymentNumber})</p>
+                <p><small>Must be enrolled in at least 12 credits for TAP eligibility</small></p>
+            `;
+        }
+
+        function displayOverallResults(overallPass, pointsPass, gpaPass, creditsPass) {
+            const overallStatus = document.getElementById('overallStatus');
+            const title = document.getElementById('overallStatusTitle');
+            const content = document.getElementById('overallStatusContent');
+
+            overallStatus.className = `overall-status ${overallPass ? 'pass' : 'fail'}`;
+
+            if (overallPass) {
+                title.innerHTML = ' You are eligible for TAP (Bachelor\'s Program)';
+                content.innerHTML = '<p><strong>You meet all TAP requirements for bachelor\'s degree programs!</strong></p>';
+            } else {
+                title.innerHTML = 'L You are not eligible for TAP (Bachelor\'s Program)';
+                
+                const failedRequirements = [];
+                if (!pointsPass) failedRequirements.push('TAP points exhausted');
+                if (!gpaPass) failedRequirements.push('GPA requirement not met');
+                if (!creditsPass) failedRequirements.push('Credit requirements not met');
+
+                content.innerHTML = `
+                    <p><strong>Failed requirement(s):</strong></p>
+                    <ul style="text-align: left; margin: 1rem 0;">
+                        ${failedRequirements.map(req => `<li>${req}</li>`).join('')}
+                    </ul>
+                    <p><strong>Overall risk score is your LOWEST score for all requirements</strong></p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
