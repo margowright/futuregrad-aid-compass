@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Test</title>
+</head>
+<body>
+    <h1>Simple JavaScript Test</h1>
+    <button id="testButton">Click Me</button>
+    <div id="output"></div>
+
+    <script>
+        console.log('Script is loading...');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded');
+            
+            const button = document.getElementById('testButton');
+            const output = document.getElementById('output');
+            
+            console.log('Button found:', button ? 'YES' : 'NO');
+            
+            if (button) {
+                button.addEventListener('click', function() {
+                    console.log('Button clicked!');
+                    output.innerHTML = '<p>JavaScript is working! Time: ' + new Date().toLocaleTimeString() + '</p>';
+                    alert('Button click detected!');
+                });
+            }
+        });
+        
+        // Also try without DOM ready
+        setTimeout(function() {
+            console.log('Timeout test - trying direct button access');
+            const btn = document.getElementById('testButton');
+            if (btn) {
+                console.log('Button accessible via timeout');
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
