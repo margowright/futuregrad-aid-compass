@@ -1,0 +1,32 @@
+{
+  "name": "futuregrad-aid-compass",
+  "version": "1.0.0",
+  "description": "CUNY Financial Aid Navigator for Bachelor's Degree Programs",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s . -p $PORT",
+    "dev": "serve -s . -p 3000"
+  },
+  "keywords": [
+    "cuny",
+    "financial-aid",
+    "education",
+    "calculator",
+    "sap",
+    "tap",
+    "mtf"
+  ],
+  "author": "Margo Wright",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/margowright/futuregrad-aid-compass.git"
+  },
+  "homepage": "https://github.com/margowright/futuregrad-aid-compass"
+}
