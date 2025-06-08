@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutureGrad Aid Compass - CUNY Financial Aid Navigator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #111111;
+            background: linear-gradient(135deg, #c0d8d6 0%, #7cb8b6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(245, 245, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #7cb8b6, #000000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(124, 184, 182, 0.3);
+        }
+
+        .logo-placeholder::before {
+            content: ">�";
+            font-size: 24px;
+        }
+
+        .header-text h1 {
+            color: #000000;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-text h2 {
+            color: #111111;
+            font-size: 1.1rem;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        /* Disclaimer Box */
+        .disclaimer {
+            background: linear-gradient(135deg, #fab131, #ed5a3f);
+            color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 20px rgba(250, 177, 49, 0.3);
+            border-left: 6px solid #ed5a3f;
+        }
+
+        .disclaimer h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .disclaimer h3::before {
+            content: "�";
+            margin-right: 8px;
+        }
+
+        .disclaimer p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Navigation Buttons */
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 3rem 0;
+        }
+
+        .nav-button {
+            background: rgba(245, 245, 245, 0.95);
+            border: none;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-decoration: none;
+            color: #111111;
+            display: block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(124, 184, 182, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-button:hover::before {
+            left: 100%;
+        }
+
+        .nav-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(124, 184, 182, 0.3);
+            background: rgba(245, 245, 245, 1);
+        }
+
+        .nav-button-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .nav-button h3 {
+            color: #000000;
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-button p {
+            color: #111111;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            color: #f5f5f5;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #f5f5f5;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            background: rgba(124, 184, 182, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .header-text h2 {
+                font-size: 1rem;
+            }
+
+            .logo-placeholder {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+
+            .logo-placeholder::before {
+                font-size: 20px;
+            }
+
+            .nav-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+
+            .nav-button {
+                padding: 1.5rem 1rem;
+            }
+
+            .nav-button-icon {
+                font-size: 2rem;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .disclaimer {
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem 0;
+            }
+
+            .header-content {
+                padding: 0.5rem 0;
+            }
+
+            .disclaimer {
+                margin: 1rem 0;
+            }
+
+            .nav-grid {
+                margin: 2rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-placeholder"></div>
+                    <div class="header-text">
+                        <h1>FutureGrad Aid Compass</h1>
+                        <h2>CUNY Financial Aid Navigator</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="disclaimer">
+                <h3>Important Disclaimer</h3>
+                <p>FutureGrad Aid Compass is for informational purposes only and does not guarantee financial aid eligibility. All information is based on student self-reporting and may not reflect official school records. Students should consult their campus financial aid office for official guidance.</p>
+            </div>
+
+            <div class="nav-grid">
+                <a href="federal-calculator.html" class="nav-button">
+                    <span class="nav-button-icon"><�</span>
+                    <h3>Federal Aid Calculator</h3>
+                    <p>Calculate your estimated federal financial aid including Pell Grants, SEOG, and federal work-study eligibility</p>
+                </a>
+
+                <a href="tap-calculator.html" class="nav-button">
+                    <span class="nav-button-icon">=�</span>
+                    <h3>TAP Calculator</h3>
+                    <p>Estimate your New York State Tuition Assistance Program (TAP) award based on your family income and circumstances</p>
+                </a>
+
+                <a href="mtf-calculator.html" class="nav-button">
+                    <span class="nav-button-icon">=�</span>
+                    <h3>MTF Calculator</h3>
+                    <p>Calculate your Maximum TAP Family Income threshold and understand your state aid eligibility limits</p>
+                </a>
+
+                <a href="dashboard.html" class="nav-button">
+                    <span class="nav-button-icon">=�</span>
+                    <h3>View Aid Dashboard</h3>
+                    <p>Track and compare your financial aid estimates, save calculations, and monitor your progress toward funding goals</p>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#faqs">FAQs</a>
+                    <a href="#terms">Terms of Use</a>
+                    <a href="#privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-text">
+                    <p>&copy; 2024 FutureGrad Aid Compass. Designed to help CUNY students navigate their financial aid journey.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

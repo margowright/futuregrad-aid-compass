@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Aid Compass Dashboard - FutureGrad Aid Compass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #111111;
+            background: linear-gradient(135deg, #c0d8d6 0%, #7cb8b6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(245, 245, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #7cb8b6, #000000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(124, 184, 182, 0.3);
+        }
+
+        .logo-placeholder::before {
+            content: ">Ì";
+            font-size: 20px;
+        }
+
+        .header-text h1 {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .back-btn {
+            background: #7cb8b6;
+            color: #f5f5f5;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .back-btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        /* Advisory Message */
+        .advisory {
+            background: linear-gradient(135deg, #fab131, #ed5a3f);
+            color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: 0 4px 20px rgba(250, 177, 49, 0.3);
+            border-left: 6px solid #ed5a3f;
+        }
+
+        .advisory h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .advisory h3::before {
+            content: "=°";
+            margin-right: 8px;
+        }
+
+        .advisory p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        /* Dashboard Grid */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .calculator-card {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #7cb8b6, #fab131, #ed5a3f);
+        }
+
+        .calculator-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(124, 184, 182, 0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            font-size: 2rem;
+            margin-right: 1rem;
+        }
+
+        .card-title {
+            color: #000000;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .status-complete {
+            background: rgba(124, 184, 182, 0.2);
+            color: #000000;
+        }
+
+        .status-incomplete {
+            background: rgba(237, 90, 63, 0.2);
+            color: #ed5a3f;
+        }
+
+        .data-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem;
+            background: rgba(192, 216, 214, 0.3);
+            border-radius: 8px;
+        }
+
+        .data-label {
+            font-weight: 500;
+            color: #111111;
+        }
+
+        .data-value {
+            font-weight: 600;
+            color: #000000;
+        }
+
+        .no-data {
+            text-align: center;
+            color: #111111;
+            font-style: italic;
+            padding: 2rem;
+        }
+
+        .calculate-btn {
+            background: #7cb8b6;
+            color: #f5f5f5;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            background: #000000;
+            color: #f5f5f5;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .action-btn:hover {
+            background: #ed5a3f;
+            transform: translateY(-2px);
+        }
+
+        .action-btn.secondary {
+            background: #7cb8b6;
+        }
+
+        .action-btn.secondary:hover {
+            background: #fab131;
+        }
+
+        /* Summary Section */
+        .summary-section {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-title {
+            color: #000000;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .summary-title::before {
+            content: "= ";
+            margin-right: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.95);
+            color: #f5f5f5;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #f5f5f5;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .footer-links a:hover {
+            background: rgba(124, 184, 182, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .calculator-card {
+                padding: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .action-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+
+            .footer-links {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            main {
+                padding: 1rem 0;
+            }
+
+            .advisory {
+                padding: 1rem;
+                margin: 1rem 0;
+            }
+
+            .calculator-card {
+                padding: 1rem;
+            }
+
+            .card-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                background: white;
+                color: black;
+            }
+
+            .back-btn,
+            .action-buttons,
+            footer {
+                display: none;
+            }
+
+            .calculator-card {
+                break-inside: avoid;
+                box-shadow: none;
+                border: 1px solid #ccc;
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="logo-placeholder"></div>
+                    <div class="header-text">
+                        <h1>Your Aid Compass Dashboard</h1>
+                    </div>
+                </div>
+                <a href="index.html" class="back-btn">
+                    <span>ê</span> Back to Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="advisory">
+                <h3>Important Guidance</h3>
+                <p>These minimum requirements are not intended to be your target. To stay on track academically and financially, aim to exceed these minimums.</p>
+            </div>
+
+            <div class="summary-section">
+                <h2 class="summary-title">Financial Aid Overview</h2>
+                <div id="summaryContent">
+                    <!-- Summary will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Federal Aid Calculator Card -->
+                <div class="calculator-card" id="federalCard">
+                    <div class="card-header">
+                        <span class="card-icon"><ì</span>
+                        <h3 class="card-title">Federal Aid Status</h3>
+                    </div>
+                    <div id="federalStatus" class="status-indicator status-incomplete">
+                        <span>œ</span> Not Calculated
+                    </div>
+                    <div id="federalData" class="data-grid">
+                        <div class="no-data">
+                            No federal aid calculation completed yet.
+                            <a href="federal-calculator.html" class="calculate-btn">Calculate Federal Aid</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAP Calculator Card -->
+                <div class="calculator-card" id="tapCard">
+                    <div class="card-header">
+                        <span class="card-icon">=˝</span>
+                        <h3 class="card-title">TAP Status</h3>
+                    </div>
+                    <div id="tapStatus" class="status-indicator status-incomplete">
+                        <span>œ</span> Not Calculated
+                    </div>
+                    <div id="tapData" class="data-grid">
+                        <div class="no-data">
+                            No TAP calculation completed yet.
+                            <a href="tap-calculator.html" class="calculate-btn">Calculate TAP Aid</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MTF Calculator Card -->
+                <div class="calculator-card" id="mtfCard">
+                    <div class="card-header">
+                        <span class="card-icon">= </span>
+                        <h3 class="card-title">MTF Status</h3>
+                    </div>
+                    <div id="mtfStatus" class="status-indicator status-incomplete">
+                        <span>œ</span> Not Calculated
+                    </div>
+                    <div id="mtfData" class="data-grid">
+                        <div class="no-data">
+                            No MTF calculation completed yet.
+                            <a href="mtf-calculator.html" class="calculate-btn">Calculate MTF</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button onclick="printDashboard()" class="action-btn">
+                    <span>=®</span> Print/Save
+                </button>
+                <button onclick="startOver()" class="action-btn secondary">
+                    <span>=</span> Start Over
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="#faqs">FAQs</a>
+                    <a href="#terms">Terms of Use</a>
+                    <a href="#privacy">Privacy Policy</a>
+                </div>
+                <div class="footer-text">
+                    <p>&copy; 2024 FutureGrad Aid Compass. Designed to help CUNY students navigate their financial aid journey.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Load dashboard data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDashboardData();
+        });
+
+        function loadDashboardData() {
+            loadFederalData();
+            loadTapData();
+            loadMtfData();
+            generateSummary();
+        }
+
+        function loadFederalData() {
+            const federalData = localStorage.getItem('federalAidResults');
+            const statusEl = document.getElementById('federalStatus');
+            const dataEl = document.getElementById('federalData');
+
+            if (federalData) {
+                const data = JSON.parse(federalData);
+                statusEl.innerHTML = '<span>œ</span> Calculation Complete';
+                statusEl.className = 'status-indicator status-complete';
+
+                dataEl.innerHTML = `
+                    <div class="data-item">
+                        <span class="data-label">Expected Family Contribution (EFC):</span>
+                        <span class="data-value">$${data.efc || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Estimated Pell Grant:</span>
+                        <span class="data-value">$${data.pellGrant || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Estimated SEOG:</span>
+                        <span class="data-value">$${data.seog || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Work-Study Eligible:</span>
+                        <span class="data-value">${data.workStudy || 'No'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Total Federal Aid:</span>
+                        <span class="data-value">$${data.totalAid || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Calculated On:</span>
+                        <span class="data-value">${new Date(data.timestamp).toLocaleDateString()}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function loadTapData() {
+            const tapData = localStorage.getItem('tapResults');
+            const statusEl = document.getElementById('tapStatus');
+            const dataEl = document.getElementById('tapData');
+
+            if (tapData) {
+                const data = JSON.parse(tapData);
+                statusEl.innerHTML = '<span>œ</span> Calculation Complete';
+                statusEl.className = 'status-indicator status-complete';
+
+                dataEl.innerHTML = `
+                    <div class="data-item">
+                        <span class="data-label">TAP Award Amount:</span>
+                        <span class="data-value">$${data.tapAward || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Academic Year:</span>
+                        <span class="data-value">${data.academicYear || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">NYS Residency:</span>
+                        <span class="data-value">${data.residency || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Family Net Taxable Income:</span>
+                        <span class="data-value">$${data.familyIncome || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Eligibility Status:</span>
+                        <span class="data-value">${data.eligible ? 'Eligible' : 'Not Eligible'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Calculated On:</span>
+                        <span class="data-value">${new Date(data.timestamp).toLocaleDateString()}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function loadMtfData() {
+            const mtfData = localStorage.getItem('mtfResults');
+            const statusEl = document.getElementById('mtfStatus');
+            const dataEl = document.getElementById('mtfData');
+
+            if (mtfData) {
+                const data = JSON.parse(mtfData);
+                statusEl.innerHTML = '<span>œ</span> Calculation Complete';
+                statusEl.className = 'status-indicator status-complete';
+
+                dataEl.innerHTML = `
+                    <div class="data-item">
+                        <span class="data-label">Maximum TAP Family Income:</span>
+                        <span class="data-value">$${data.maxIncome || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Family Size:</span>
+                        <span class="data-value">${data.familySize || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Students in College:</span>
+                        <span class="data-value">${data.studentsInCollege || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Current Family Income:</span>
+                        <span class="data-value">$${data.currentIncome || 'N/A'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Income Status:</span>
+                        <span class="data-value">${data.belowThreshold ? 'Below Threshold' : 'Above Threshold'}</span>
+                    </div>
+                    <div class="data-item">
+                        <span class="data-label">Calculated On:</span>
+                        <span class="data-value">${new Date(data.timestamp).toLocaleDateString()}</span>
+                    </div>
+                `;
+            }
+        }
+
+        function generateSummary() {
+            const federalData = localStorage.getItem('federalAidResults');
+            const tapData = localStorage.getItem('tapResults');
+            const mtfData = localStorage.getItem('mtfResults');
+            const summaryEl = document.getElementById('summaryContent');
+
+            let totalAid = 0;
+            let completedCalculations = 0;
+            let summaryHTML = '';
+
+            if (federalData) {
+                const data = JSON.parse(federalData);
+                totalAid += parseFloat(data.totalAid) || 0;
+                completedCalculations++;
+            }
+
+            if (tapData) {
+                const data = JSON.parse(tapData);
+                totalAid += parseFloat(data.tapAward) || 0;
+                completedCalculations++;
+            }
+
+            if (mtfData) {
+                completedCalculations++;
+            }
+
+            if (completedCalculations === 0) {
+                summaryHTML = '<p class="no-data">Complete your first calculation to see your financial aid summary.</p>';
+            } else {
+                summaryHTML = `
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <span class="data-label">Calculators Completed:</span>
+                            <span class="data-value">${completedCalculations} of 3</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Estimated Total Aid:</span>
+                            <span class="data-value">$${totalAid.toLocaleString()}</span>
+                        </div>
+                        <div class="data-item">
+                            <span class="data-label">Progress:</span>
+                            <span class="data-value">${Math.round((completedCalculations / 3) * 100)}% Complete</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            summaryEl.innerHTML = summaryHTML;
+        }
+
+        function printDashboard() {
+            window.print();
+        }
+
+        function startOver() {
+            if (confirm('Are you sure you want to clear all calculator data? This action cannot be undone.')) {
+                localStorage.removeItem('federalAidResults');
+                localStorage.removeItem('tapResults');
+                localStorage.removeItem('mtfResults');
+                
+                // Reload the page to show cleared state
+                location.reload();
+            }
+        }
+
+        // Auto-refresh data every 30 seconds in case user has multiple tabs open
+        setInterval(loadDashboardData, 30000);
+    </script>
+</body>
+</html>
