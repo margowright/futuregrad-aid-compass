@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Aid Calculator - FutureGrad Aid Compass</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #111111;
+            background: linear-gradient(135deg, #c0d8d6 0%, #7cb8b6 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: rgba(245, 245, 245, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(45deg, #7cb8b6, #000000);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            box-shadow: 0 4px 15px rgba(124, 184, 182, 0.3);
+        }
+
+        .logo-placeholder::before {
+            content: "🧭";
+            font-size: 20px;
+        }
+
+        .header-text h1 {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .header-text h2 {
+            color: #111111;
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem 0;
+        }
+
+        /* Disclaimer */
+        .disclaimer {
+            background: rgba(124, 184, 182, 0.2);
+            color: #111111;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 6px solid #7cb8b6;
+        }
+
+        /* Bachelor's Warning */
+        .bachelor-warning {
+            background: linear-gradient(135deg, #fab131, #ed5a3f);
+            color: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            border-left: 6px solid #ed5a3f;
+        }
+
+        /* Form Styles */
+        .calculator-form {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-subtitle {
+            color: #111111;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #000000;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid rgba(124, 184, 182, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            min-height: 44px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #7cb8b6;
+            box-shadow: 0 0 0 3px rgba(124, 184, 182, 0.2);
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: #111111;
+            margin-top: 0.25rem;
+            font-style: italic;
+        }
+
+        .error-message {
+            color: #ed5a3f;
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        /* Calculate Button */
+        .calculate-btn {
+            background: #000000;
+            color: #f5f5f5;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            min-height: 44px;
+            margin-top: 1rem;
+        }
+
+        .calculate-btn:hover {
+            background: #7cb8b6;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            margin-top: 3rem;
+        }
+
+        .results-title {
+            color: #000000;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .result-card {
+            background: rgba(245, 245, 245, 0.95);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            color: #000000;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .card-content {
+            color: #111111;
+            line-height: 1.5;
+        }
+
+        .status-pass {
+            background: rgba(124, 184, 182, 0.2);
+            color: #000000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .status-fail {
+            background: rgba(237, 90, 63, 0.2);
+            color: #ed5a3f;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        /* Navigation */
+        .navigation {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 3rem 0;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: #7cb8b6;
+            color: #f5f5f5;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            min-height: 44px;
+        }
+
+        .nav-btn:hover {
+            background: #000000;
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.primary {
+            background: #fab131;
+        }
+
+        .nav-btn.primary:hover {
+            background: #ed5a3f;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .header-text h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+
+            .results-title {
+                font-size: 1.5rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo-container">
+                    <div class="logo-placeholder"></div>
+                    <div class="header-text">
+                        <h1>FutureGrad Aid Compass</h1>
+                        <h2>CUNY Financial Aid Navigator</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="disclaimer">
+                <p><strong>Info:</strong> You are entering self-reported data. Results are for your general guidance and may not reflect your official financial aid status. Always verify with your financial aid advisor.</p>
+            </div>
+
+            <div class="bachelor-warning">
+                <p><strong>Warning:</strong> This calculator is designed for BACHELOR DEGREE programs only. Associate degree and graduate programs have different SAP requirements.</p>
+            </div>
+
+            <div class="calculator-form">
+                <h2 class="form-title">Federal Aid Eligibility Calculator (CUNY SAP Standards)</h2>
+                <p class="form-subtitle">Bachelor Programs Only - Check your Satisfactory Academic Progress (SAP) status</p>
+
+                <form id="federalForm">
+                    <div class="form-group">
+                        <label for="creditsAttempted">Total Credits Attempted</label>
+                        <input type="number" id="creditsAttempted" name="creditsAttempted" 
+                               min="0.001" max="999.999" step="0.001" required>
+                        <div class="helper-text">Include all courses attempted, even withdrawals, failures, and transfer credits</div>
+                        <div class="error-message" id="creditsAttemptedError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creditsEarned">Total Credits Earned</label>
+                        <input type="number" id="creditsEarned" name="creditsEarned" 
+                               min="0" max="999.999" step="0.001" required>
+                        <div class="helper-text">Only courses with grades of A, B, C, D, or P (passing grades)</div>
+                        <div class="error-message" id="creditsEarnedError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="currentGPA">Current Cumulative GPA</label>
+                        <input type="number" id="currentGPA" name="currentGPA" 
+                               min="0" max="4.0" step="0.01" required>
+                        <div class="helper-text">Your overall GPA across all semesters at CUNY</div>
+                        <div class="error-message" id="currentGPAError"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="programCredits">Bachelor Program Credits Required</label>
+                        <input type="number" id="programCredits" name="programCredits" 
+                               min="120" max="180" step="1" value="120" required>
+                        <div class="helper-text">Most bachelor programs require 120 credits. Check your degree requirements.</div>
+                        <div class="error-message" id="programCreditsError"></div>
+                    </div>
+
+                    <button type="submit" class="calculate-btn">Calculate Federal Aid Status</button>
+                </form>
+            </div>
+
+            <div class="results-section" id="resultsSection">
+                <h2 class="results-title">Your Federal Aid SAP Status (Bachelor Programs)</h2>
+
+                <div class="result-card" id="gpaCard">
+                    <h3 class="card-title">GPA Requirement</h3>
+                    <div id="gpaStatus"></div>
+                    <div class="card-content" id="gpaContent"></div>
+                </div>
+
+                <div class="result-card" id="completionCard">
+                    <h3 class="card-title">Completion Rate (Bachelor Programs Only)</h3>
+                    <div id="completionStatus"></div>
+                    <div class="card-content" id="completionContent"></div>
+                </div>
+
+                <div class="result-card" id="timeFrameCard">
+                    <h3 class="card-title">Maximum Time Frame</h3>
+                    <div id="timeFrameStatus"></div>
+                    <div class="card-content" id="timeFrameContent"></div>
+                </div>
+
+                <div class="result-card" id="overallCard">
+                    <h3 class="card-title">Overall Status</h3>
+                    <div id="overallContent"></div>
+                </div>
+
+                <div class="navigation">
+                    <a href="index.html" class="nav-btn">Back to Home</a>
+                    <a href="tap-calculator.html" class="nav-btn primary">Save & Continue to TAP</a>
+                    <a href="dashboard.html" class="nav-btn">Skip to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        console.log('Federal calculator script starting...');
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing calculator...');
+            
+            const form = document.getElementById('federalForm');
+            const resultsSection = document.getElementById('resultsSection');
+
+            console.log('Form found:', form ? 'YES' : 'NO');
+            console.log('Results section found:', resultsSection ? 'YES' : 'NO');
+
+            if (!form) {
+                console.error('Form not found!');
+                return;
+            }
+
+            form.addEventListener('submit', function(e) {
+                console.log('Form submit event triggered');
+                e.preventDefault();
+                calculateFederalAid();
+            });
+
+            // Test button click separately
+            const button = form.querySelector('button[type="submit"]');
+            console.log('Button found:', button ? 'YES' : 'NO');
+            
+            if (button) {
+                button.addEventListener('click', function(e) {
+                    console.log('Button clicked directly');
+                });
+            }
+        });
+
+        function calculateFederalAid() {
+            console.log('Calculate function called');
+            
+            try {
+                const creditsAttempted = parseFloat(document.getElementById('creditsAttempted').value);
+                const creditsEarned = parseFloat(document.getElementById('creditsEarned').value);
+                const currentGPA = parseFloat(document.getElementById('currentGPA').value);
+                const programCredits = parseFloat(document.getElementById('programCredits').value);
+
+                console.log('Input values:', {
+                    creditsAttempted,
+                    creditsEarned,
+                    currentGPA,
+                    programCredits
+                });
+
+                // Validate inputs
+                if (isNaN(creditsAttempted) || isNaN(creditsEarned) || isNaN(currentGPA) || isNaN(programCredits)) {
+                    console.error('Invalid input values');
+                    alert('Please fill in all fields with valid numbers');
+                    return;
+                }
+
+                // Calculate completion rate
+                const completionRate = (creditsEarned / creditsAttempted) * 100;
+
+                // GPA requirement FOR BACHELOR PROGRAMS
+                let requiredGPA;
+                if (creditsAttempted >= 0.001 && creditsAttempted <= 12.999) {
+                    requiredGPA = 1.50;
+                } else if (creditsAttempted >= 13 && creditsAttempted <= 24.999) {
+                    requiredGPA = 1.75;
+                } else if (creditsAttempted >= 25) {
+                    requiredGPA = 2.00;
+                }
+
+                // CUNY Pace requirement FOR BACHELOR PROGRAMS
+                let requiredCompletionRate = 0;
+                if (creditsAttempted >= 25 && creditsAttempted <= 30.999) {
+                    requiredCompletionRate = 14.99;
+                } else if (creditsAttempted >= 31 && creditsAttempted <= 36.999) {
+                    requiredCompletionRate = 24.99;
+                } else if (creditsAttempted >= 37 && creditsAttempted <= 45.999) {
+                    requiredCompletionRate = 34.99;
+                } else if (creditsAttempted >= 46) {
+                    requiredCompletionRate = 39.99;
+                }
+
+                // Maximum time frame (150% of bachelor program length)
+                const maxCreditsAllowed = programCredits * 1.5;
+
+                // Check all requirements
+                const gpaPass = currentGPA >= requiredGPA;
+                const completionPass = completionRate >= requiredCompletionRate;
+                const timeFramePass = creditsAttempted <= maxCreditsAllowed;
+                const overallPass = gpaPass && completionPass && timeFramePass;
+
+                console.log('Calculations:', {
+                    completionRate: completionRate.toFixed(2),
+                    requiredGPA,
+                    requiredCompletionRate,
+                    gpaPass,
+                    completionPass,
+                    timeFramePass,
+                    overallPass
+                });
+
+                // Display results
+                displayResults(currentGPA, requiredGPA, completionRate, requiredCompletionRate, 
+                              creditsAttempted, maxCreditsAllowed, gpaPass, completionPass, 
+                              timeFramePass, overallPass);
+
+                // Save to localStorage
+                const results = {
+                    creditsAttempted: creditsAttempted.toFixed(3),
+                    creditsEarned: creditsEarned.toFixed(3),
+                    currentGPA: currentGPA.toFixed(2),
+                    programCredits: programCredits,
+                    completionRate: completionRate.toFixed(2),
+                    requiredGPA: requiredGPA.toFixed(2),
+                    gpaPass: gpaPass,
+                    completionPass: completionPass,
+                    timeFramePass: timeFramePass,
+                    overallPass: overallPass,
+                    timestamp: new Date().toISOString()
+                };
+
+                localStorage.setItem('federalAidResults', JSON.stringify(results));
+                console.log('Results saved to localStorage');
+
+            } catch (error) {
+                console.error('Error in calculation:', error);
+                alert('Error calculating results: ' + error.message);
+            }
+        }
+
+        function displayResults(currentGPA, requiredGPA, completionRate, requiredCompletionRate, 
+                               creditsAttempted, maxCreditsAllowed, gpaPass, completionPass, 
+                               timeFramePass, overallPass) {
+            
+            console.log('Displaying results...');
+
+            // Show results section
+            const resultsSection = document.getElementById('resultsSection');
+            resultsSection.style.display = 'block';
+
+            // GPA Results
+            const gpaStatus = document.getElementById('gpaStatus');
+            const gpaContent = document.getElementById('gpaContent');
+            gpaStatus.className = gpaPass ? 'status-pass' : 'status-fail';
+            gpaStatus.textContent = gpaPass ? '✓ Meets GPA requirement' : '✗ Below required GPA';
+            gpaContent.innerHTML = `
+                <p><strong>Your GPA:</strong> ${currentGPA.toFixed(2)}</p>
+                <p><strong>Required GPA:</strong> ${requiredGPA.toFixed(2)}</p>
+                <p>Based on ${creditsAttempted.toFixed(3)} credits attempted</p>
+            `;
+
+            // Completion Rate Results
+            const completionStatus = document.getElementById('completionStatus');
+            const completionContent = document.getElementById('completionContent');
+            completionStatus.className = completionPass ? 'status-pass' : 'status-fail';
+            completionStatus.textContent = completionPass ? '✓ Meets completion requirement' : '✗ Below required completion rate';
+            completionContent.innerHTML = `
+                <p><strong>Your completion rate:</strong> ${completionRate.toFixed(2)}%</p>
+                <p><strong>Required completion rate:</strong> ${requiredCompletionRate.toFixed(2)}%</p>
+                <p>Credits earned ÷ Credits attempted</p>
+            `;
+
+            // Time Frame Results
+            const timeFrameStatus = document.getElementById('timeFrameStatus');
+            const timeFrameContent = document.getElementById('timeFrameContent');
+            timeFrameStatus.className = timeFramePass ? 'status-pass' : 'status-fail';
+            timeFrameStatus.textContent = timeFramePass ? '✓ Within time frame' : '✗ Exceeds maximum time frame';
+            timeFrameContent.innerHTML = `
+                <p><strong>Credits attempted:</strong> ${creditsAttempted.toFixed(3)}</p>
+                <p><strong>Maximum allowed:</strong> ${maxCreditsAllowed.toFixed(1)} (150% of program)</p>
+                <p><strong>Remaining:</strong> ${Math.max(0, maxCreditsAllowed - creditsAttempted).toFixed(1)} credits</p>
+            `;
+
+            // Overall Results
+            const overallContent = document.getElementById('overallContent');
+            if (overallPass) {
+                overallContent.innerHTML = `
+                    <div class="status-pass">✓ You meet ALL Federal SAP requirements for bachelor programs</div>
+                    <p>Meeting minimums is not the goal - aim higher for academic success!</p>
+                `;
+            } else {
+                const failedRequirements = [];
+                if (!gpaPass) failedRequirements.push('GPA requirement');
+                if (!completionPass) failedRequirements.push('Completion rate requirement');
+                if (!timeFramePass) failedRequirements.push('Maximum time frame requirement');
+
+                overallContent.innerHTML = `
+                    <div class="status-fail">✗ You do not meet Federal SAP requirements for bachelor programs</div>
+                    <p><strong>Failed requirement(s):</strong></p>
+                    <ul>${failedRequirements.map(req => `<li>${req}</li>`).join('')}</ul>
+                    <p>Meeting minimums is not the goal - aim higher for academic success!</p>
+                `;
+            }
+
+            console.log('Results displayed successfully');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
