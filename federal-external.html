@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Federal Aid Calculator - External JS</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 100%; box-sizing: border-box; }
+        button { padding: 12px 24px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #0056b3; }
+        .results { margin-top: 30px; }
+        .result-card { background: #f8f9fa; padding: 20px; margin: 15px 0; border-radius: 8px; border-left: 4px solid #007bff; }
+        .status-pass { background: #d4edda; color: #155724; padding: 8px 12px; border-radius: 4px; display: inline-block; }
+        .status-fail { background: #f8d7da; color: #721c24; padding: 8px 12px; border-radius: 4px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Federal Aid Calculator - External JS Test</h1>
+        
+        <form id="federalForm">
+            <div class="form-group">
+                <label for="creditsAttempted">Total Credits Attempted</label>
+                <input type="number" id="creditsAttempted" step="0.001" min="0.001" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="creditsEarned">Total Credits Earned</label>
+                <input type="number" id="creditsEarned" step="0.001" min="0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="currentGPA">Current Cumulative GPA</label>
+                <input type="number" id="currentGPA" step="0.01" min="0" max="4.0" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="programCredits">Bachelor Program Credits Required</label>
+                <input type="number" id="programCredits" min="120" max="180" value="120" required>
+            </div>
+            
+            <button type="submit">Calculate Federal Aid Status</button>
+        </form>
+        
+        <div class="results" id="resultsSection" style="display: none;">
+            <h2>Your Federal Aid SAP Status</h2>
+            
+            <div class="result-card" id="gpaCard">
+                <h3>GPA Requirement</h3>
+                <div id="gpaStatus"></div>
+                <div id="gpaContent"></div>
+            </div>
+            
+            <div class="result-card" id="completionCard">
+                <h3>Completion Rate</h3>
+                <div id="completionStatus"></div>
+                <div id="completionContent"></div>
+            </div>
+            
+            <div class="result-card" id="timeFrameCard">
+                <h3>Maximum Time Frame</h3>
+                <div id="timeFrameStatus"></div>
+                <div id="timeFrameContent"></div>
+            </div>
+            
+            <div class="result-card" id="overallCard">
+                <h3>Overall Status</h3>
+                <div id="overallContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/federal-calculator.js"></script>
+</body>
+</html>
