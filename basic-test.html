@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Basic Test</title>
+</head>
+<body>
+    <h1>Basic JavaScript Test</h1>
+    <p id="status">JavaScript not loaded</p>
+    <button onclick="testClick()">Test Button</button>
+    <div id="output"></div>
+
+    <script>
+        document.getElementById('status').textContent = 'JavaScript is working!';
+        
+        function testClick() {
+            document.getElementById('output').innerHTML = '<p style="color: green;">Button clicked at ' + new Date() + '</p>';
+        }
+    </script>
+</body>
+</html>

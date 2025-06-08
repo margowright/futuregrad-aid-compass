@@ -4,8 +4,9 @@
   "description": "CUNY Financial Aid Navigator for Bachelor's Degree Programs",
   "main": "index.html",
   "scripts": {
-    "start": "serve -s . -p $PORT --cors",
-    "dev": "serve -s . -p 3000"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "serve": "serve -s . -p $PORT --cors"
   },
   "keywords": [
     "cuny",
